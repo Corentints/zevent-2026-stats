@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/zevent", "destination": "https://zevent.fr/api/" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
