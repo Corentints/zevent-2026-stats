@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "zevent-history-worker",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-04",
+  "observability": {
+    "enabled": true
+  },
+  "triggers": {
+    "crons": ["*/6 * * * *"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "zevent-history",
+      "database_id": "b8e3d196-fde1-45ac-b1cc-54ea33ef5695",
+      "migrations_dir": "./migrations"
+    }
+  ]
+}
