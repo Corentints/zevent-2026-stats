@@ -1,0 +1,159 @@
+import { useMemo, useState } from 'react'
+import { Link } from '@tanstack/react-router'
+import { Search } from 'lucide-react'
+import { MarqueeText } from '@/components/marquee-text'
+import { StreamerHoverCard } from '@/components/streamer-hover-card'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Input } from '@/components/ui/input'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useDonationGoals } from '@/hooks/use-donation-goals'
+import { formatEuros } from '@/lib/format'
+import type { DonationGoal, Streamer } from '@/types/zevent'
+
+interface StreamerSidebarProps {
+  streamers: Streamer[]
+  isPending?: boolean
+}
+
+function getCurrentGoal(goals: DonationGoal[] | undefined, currentAmount: number) {
+  if (!goals || goals.length === 0) return undefined
+  return [...goals]
+    .sort((a, b) => a.amountRequired - b.amountRequired)
+    .find((goal) => goal.amountRequired > currentAmount)
+}
+
+function SidebarRowSkeleton({ withGoal }: { withGoal: boolean }) {
+  return (
+    <div className="flex flex-col gap-1.5 px-2 py-2">
+      <div className="flex items-center gap-2.5">
+        <Skeleton className="size-8 shrink-0 rounded-full" />
+        <Skeleton className="h-3.5 flex-1" />
+        <Skeleton className="h-3.5 w-12 shrink-0" />
+      </div>
+      {withGoal && (
+        <div className="space-y-1 pl-[2.625rem]">
+          <Skeleton className="h-2.5 w-3/4" />
+          <Skeleton className="h-1 w-full" />
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) {
+  const [search, setSearch] = useState('')
+  const goals = useDonationGoals()
+
+  const sorted = useMemo(
+    () => [...streamers].sort((a, b) => b.donationAmount.number - a.donationAmount.number),
+    [streamers],
+  )
+
+  const filtered = useMemo(() => {
+    const query = search.trim().toLowerCase()
+    if (!query) return sorted
+    return sorted.filter((s) => s.display.toLowerCase().includes(query))
+  }, [sorted, search])
+
+  return (
+    <aside className="w-full shrink-0 border-b border-border/60 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:w-80 lg:border-r lg:border-b-0">
+      <div className="flex max-h-96 flex-col lg:h-full lg:max-h-none">
+        <div className="space-y-2 px-4 py-3">
+          {isPending ? (
+            <Skeleton className="h-3.5 w-24" />
+          ) : (
+            <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+              Streamers ({streamers.length})
+            </p>
+          )}
+          <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Rechercher…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-8 focus-visible:ring-primary/50"
+            />
+          </div>
+        </div>
+
+        <nav className="flex-1 overflow-y-auto px-2 pb-3">
+          {isPending ? (
+            <div className="space-y-0.5">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <SidebarRowSkeleton key={i} withGoal={i % 3 !== 0} />
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
+            <p className="px-2 py-4 text-sm text-muted-foreground">Aucun streamer trouvé.</p>
+          ) : (
+            <ul className="space-y-0.5">
+              {filtered.map((streamer) => {
+                const currentAmount = streamer.donationAmount.number
+                const currentGoal = getCurrentGoal(goals.data?.[streamer.twitch_id], currentAmount)
+                const progress = currentGoal
+                  ? Math.min(100, (currentAmount / currentGoal.amountRequired) * 100)
+                  : 0
+
+                const rank = sorted.indexOf(streamer) + 1
+
+                return (
+                  <li key={streamer.twitch_id}>
+                    <StreamerHoverCard
+                      streamer={streamer}
+                      rank={rank}
+                      totalStreamers={streamers.length}
+                    >
+                      <Link
+                        to="/streamer/$twitchId"
+                        params={{ twitchId: streamer.twitch_id }}
+                        className="group flex flex-col gap-1.5 rounded-sm px-2 py-2 text-sm transition-colors hover:bg-accent"
+                        activeProps={{ className: 'bg-primary/10 hover:bg-primary/10' }}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Avatar
+                            className={
+                              streamer.online
+                                ? 'size-8 shrink-0 ring-2 ring-primary ring-offset-2 ring-offset-background'
+                                : 'size-8 shrink-0'
+                            }
+                          >
+                            <AvatarImage src={streamer.profileUrl} alt={streamer.display} />
+                            <AvatarFallback className="text-xs">
+                              {streamer.display.slice(0, 2).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="min-w-0 flex-1 truncate font-medium">
+                            {streamer.display}
+                          </span>
+                          <span className="font-display shrink-0 text-xs font-bold tabular-nums text-primary">
+                            {formatEuros(currentAmount)}
+                          </span>
+                        </div>
+
+                        {currentGoal && (
+                          <div className="space-y-1 pl-[2.625rem]">
+                            <MarqueeText
+                              text={currentGoal.title}
+                              className="text-xs text-muted-foreground"
+                            />
+                            <div className="h-1 w-full overflow-hidden rounded-sm bg-secondary">
+                              <div
+                                className="h-full rounded-sm bg-primary"
+                                style={{ width: `${progress}%` }}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </Link>
+                    </StreamerHoverCard>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </nav>
+      </div>
+    </aside>
+  )
+}
