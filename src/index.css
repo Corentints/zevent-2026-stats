@@ -1,0 +1,160 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.5rem;
+
+  --background: #050604;
+  --foreground: #f3f6f2;
+  --card: #101210;
+  --card-foreground: #f3f6f2;
+  --popover: #101210;
+  --popover-foreground: #f3f6f2;
+
+  --primary: #3ef941;
+  --primary-foreground: #04220a;
+  --secondary: #171915;
+  --secondary-foreground: #f3f6f2;
+  --muted: #171915;
+  --muted-foreground: #9a9f96;
+  --accent: #1c1f1a;
+  --accent-foreground: #f3f6f2;
+  --destructive: #ff5c5c;
+
+  --border: rgba(255, 255, 255, 0.05);
+  --input: rgba(255, 255, 255, 0.07);
+  --ring: #3ef941;
+
+  --gold: #f4b740;
+  --gold-foreground: #241300;
+
+  --chart-1: #3ef941;
+  --chart-2: #f4b740;
+  --chart-3: #37c9ff;
+  --chart-4: #ff5fa2;
+  --chart-5: #b98bff;
+
+  --font-display: "General Sans", system-ui, sans-serif;
+  --font-sans: "General Sans", system-ui, sans-serif;
+}
+
+.dark {
+  --background: #050604;
+  --foreground: #f3f6f2;
+  --card: #101210;
+  --card-foreground: #f3f6f2;
+  --popover: #101210;
+  --popover-foreground: #f3f6f2;
+
+  --primary: #3ef941;
+  --primary-foreground: #04220a;
+  --secondary: #171915;
+  --secondary-foreground: #f3f6f2;
+  --muted: #171915;
+  --muted-foreground: #9a9f96;
+  --accent: #1c1f1a;
+  --accent-foreground: #f3f6f2;
+  --destructive: #ff5c5c;
+
+  --border: rgba(255, 255, 255, 0.05);
+  --input: rgba(255, 255, 255, 0.07);
+  --ring: #3ef941;
+
+  --chart-1: #3ef941;
+  --chart-2: #f4b740;
+  --chart-3: #37c9ff;
+  --chart-4: #ff5fa2;
+  --chart-5: #b98bff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 8% -10%, rgba(62, 249, 65, 0.16), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 0%, rgba(244, 183, 64, 0.1), transparent 55%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .text-glow {
+    text-shadow:
+      0 0 18px rgba(62, 249, 65, 0.55),
+      0 0 42px rgba(62, 249, 65, 0.25);
+  }
+  .card-glow {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+      0 12px 32px -18px rgba(62, 249, 65, 0.15);
+  }
+}
+
+/* Défilement du texte d'objectif dans la sidebar au survol, uniquement quand
+   il déborde (voir MarqueeText) — distance exacte fournie via --marquee-distance.
+   `animation: none` par défaut (pas juste "paused") pour que le texte revienne
+   instantanément à sa position de départ dès qu'on n'est plus en survol, et
+   reparte du début à chaque nouveau survol plutôt que de reprendre où il en
+   était resté. */
+@keyframes sidebar-goal-marquee {
+  0%,
+  10% {
+    transform: translateX(0);
+  }
+  90%,
+  100% {
+    transform: translateX(var(--marquee-distance, 0px));
+  }
+}
+
+[data-marquee] {
+  animation: none;
+}
+
+.group:hover [data-marquee] {
+  animation: sidebar-goal-marquee 2s ease-in-out infinite;
+}
