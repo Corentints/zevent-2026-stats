@@ -24,8 +24,8 @@ function StreamerList({
       {streamers.map((streamer, index) => (
         <li key={streamer.twitch_id}>
           <Link
-            to="/streamer/$twitchId"
-            params={{ twitchId: streamer.twitch_id }}
+            to="/streamer/$streamerKey"
+            params={{ streamerKey: streamer.twitch }}
             className="group flex items-center gap-3 py-3 transition-colors hover:text-primary"
           >
             <span className="w-4 shrink-0 text-xs tabular-nums text-muted-foreground">

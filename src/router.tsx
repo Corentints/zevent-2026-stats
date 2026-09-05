@@ -22,7 +22,7 @@ const leaderboardRoute = createRoute({
 
 const streamerRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/streamer/$twitchId',
+  path: '/streamer/$streamerKey',
   component: StreamerPage,
 })
 

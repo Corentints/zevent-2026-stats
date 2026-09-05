@@ -173,8 +173,8 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
                       totalStreamers={streamers.length}
                     >
                       <Link
-                        to="/streamer/$twitchId"
-                        params={{ twitchId: streamer.twitch_id }}
+                        to="/streamer/$streamerKey"
+                        params={{ streamerKey: streamer.twitch }}
                         onClick={() => setMobileOpen(false)}
                         className="group flex flex-col gap-1.5 border-l-2 border-transparent px-2 py-2 text-sm transition-colors hover:bg-accent/60"
                         activeProps={{ className: 'border-primary bg-accent/70 hover:bg-accent/70' }}

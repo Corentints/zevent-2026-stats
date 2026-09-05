@@ -29,8 +29,8 @@ export const streamerColumns = columnHelper.columns([
       const streamer = info.row.original
       return (
         <Link
-          to="/streamer/$twitchId"
-          params={{ twitchId: streamer.twitch_id }}
+          to="/streamer/$streamerKey"
+          params={{ streamerKey: streamer.twitch }}
           className="flex items-center gap-2 font-medium hover:text-primary hover:underline"
         >
           <span className="relative shrink-0">

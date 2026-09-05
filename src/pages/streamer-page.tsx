@@ -16,20 +16,26 @@ import { HISTORY_API_URL } from '@/lib/history-api'
 import { formatEuros } from '@/lib/format'
 
 export function StreamerPage() {
-  const { twitchId } = useParams({ from: '/streamer/$twitchId' })
+  const { streamerKey } = useParams({ from: '/streamer/$streamerKey' })
   const { data, isPending } = useZeventData()
-  const history = useStreamerHistory(twitchId)
   const goals = useDonationGoals()
   const goalsScrollRef = useRef<HTMLDivElement>(null)
   const activeGoalRef = useRef<HTMLDivElement>(null)
 
-  const streamer = data?.live.find((item) => item.twitch_id === twitchId)
+  const normalizedKey = streamerKey.toLowerCase()
+  const streamer = data?.live.find(
+    (item) =>
+      item.twitch_id === streamerKey ||
+      item.twitch.toLowerCase() === normalizedKey,
+  )
+  const streamerId = streamer?.twitch_id
+  const history = useStreamerHistory(streamerId)
   useDocumentTitle(streamer ? `${streamer.display} — ZEvent` : 'Streamer — ZEvent')
 
   const sortedGoals = useMemo(() => {
-    const list = goals.data?.[twitchId] ?? []
+    const list = streamerId ? goals.data?.[streamerId] ?? [] : []
     return [...list].sort((a, b) => a.amountRequired - b.amountRequired)
-  }, [goals.data, twitchId])
+  }, [goals.data, streamerId])
 
   const nextGoal = streamer
     ? sortedGoals.find((goal) => goal.amountRequired > streamer.donationAmount.number)
@@ -47,7 +53,7 @@ export function StreamerPage() {
       container.scrollTop
 
     container.scrollTop = Math.max(0, targetTop - 24)
-  }, [twitchId, activeGoal?.amountRequired, sortedGoals.length])
+  }, [streamerId, activeGoal?.amountRequired, sortedGoals.length])
 
   if (isPending) {
     return (
@@ -109,7 +115,7 @@ export function StreamerPage() {
 
           {sortedGoals.length > 0 && (
             <CardContent
-              key={twitchId}
+              key={streamerId}
               ref={goalsScrollRef}
               className="scrollbar-modern max-h-[70vh] overflow-y-auto px-0 xl:min-h-0 xl:flex-1 xl:max-h-none"
             >
