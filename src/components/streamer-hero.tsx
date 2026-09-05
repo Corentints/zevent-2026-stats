@@ -19,31 +19,20 @@ export function StreamerHero({ streamer }: StreamerHeroProps) {
               <AvatarFallback className="text-lg">{streamer.display.slice(0, 2)}</AvatarFallback>
             </Avatar>
             <span
-              aria-hidden
+              title={streamer.online ? 'En direct' : 'Hors ligne'}
               className={
                 streamer.online
                   ? 'absolute right-0.5 bottom-0.5 size-3.5 rounded-full border-[3px] border-[#141614] bg-[#eb4045] sm:size-4'
                   : 'absolute right-0.5 bottom-0.5 size-3.5 rounded-full border-[3px] border-[#141614] bg-white/30 sm:size-4'
               }
             />
+            <span className="sr-only">{streamer.online ? 'En direct' : 'Hors ligne'}</span>
           </div>
 
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <h1 className="truncate text-2xl font-semibold tracking-[-0.04em] sm:text-3xl">
-                {streamer.display}
-              </h1>
-              <span className="inline-flex items-center gap-1.5 text-xs text-white/55">
-                <span
-                  className={
-                    streamer.online
-                      ? 'size-1.5 rounded-full bg-[#eb4045]'
-                      : 'size-1.5 rounded-full bg-white/30'
-                  }
-                />
-                {streamer.online ? 'en direct' : 'hors ligne'}
-              </span>
-            </div>
+            <h1 className="truncate text-2xl font-semibold tracking-[-0.04em] sm:text-3xl">
+              {streamer.display}
+            </h1>
 
             <a
               href={`https://twitch.tv/${streamer.twitch}`}
