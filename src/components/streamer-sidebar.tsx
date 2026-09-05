@@ -63,7 +63,7 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
   }, [sorted, search])
 
   return (
-    <aside className="w-full shrink-0 border-b border-border lg:sticky lg:top-14 lg:h-[calc(100vh-3.5rem)] lg:w-72 lg:border-r lg:border-b-0">
+    <aside className="w-full shrink-0 border-b border-border lg:sticky lg:top-[57px] lg:h-[calc(100vh-57px)] lg:w-72 lg:border-r lg:border-b-0">
       <button
         type="button"
         onClick={() => setMobileOpen((open) => !open)}
