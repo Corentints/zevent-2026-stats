@@ -1,4 +1,4 @@
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts'
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import {
   ChartContainer,
   ChartTooltip,
@@ -31,7 +31,13 @@ export function DonationChart({ history }: DonationChartProps) {
       <div className="mt-6">
         {hasEnoughData ? (
           <ChartContainer config={chartConfig} className="h-[280px] w-full">
-            <LineChart data={history} margin={{ left: 8, right: 12, top: 8 }}>
+            <AreaChart data={history} margin={{ left: 8, right: 12, top: 8 }}>
+              <defs>
+                <linearGradient id="fillTotal" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="var(--chart-1)" stopOpacity={0.32} />
+                  <stop offset="95%" stopColor="var(--chart-1)" stopOpacity={0.02} />
+                </linearGradient>
+              </defs>
               <CartesianGrid vertical={false} strokeDasharray="2 6" />
               <XAxis
                 dataKey="time"
@@ -61,15 +67,15 @@ export function DonationChart({ history }: DonationChartProps) {
                   />
                 }
               />
-              <Line
+              <Area
                 dataKey="total"
                 type="monotone"
+                fill="url(#fillTotal)"
                 stroke="var(--chart-1)"
                 strokeWidth={1.75}
-                dot={false}
                 isAnimationActive={false}
               />
-            </LineChart>
+            </AreaChart>
           </ChartContainer>
         ) : (
           <div className="flex h-[280px] items-center justify-center text-sm text-muted-foreground">
