@@ -38,15 +38,7 @@ export function Navbar({ data, isFetching, onRefresh }: NavbarProps) {
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex h-14 items-center justify-between gap-4">
-          <div className="flex min-w-0 items-center gap-8">
-            <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="ZEvent stats">
-              <span className="grid size-6 place-items-center border border-primary text-xs font-bold text-primary">
-                Z
-              </span>
-              <span className="hidden text-sm font-semibold sm:inline">ZEvent stats</span>
-            </Link>
-            <NavLinks className="hidden sm:flex" />
-          </div>
+          <NavLinks className="hidden sm:flex" />
 
           <div className="flex shrink-0 items-center gap-2">
             <Button variant="ghost" size="sm" onClick={onRefresh} disabled={isFetching}>

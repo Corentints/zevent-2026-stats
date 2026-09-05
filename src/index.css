@@ -104,6 +104,12 @@
 }
 
 @layer base {
+  html {
+    scrollbar-width: none;
+  }
+  html::-webkit-scrollbar {
+    display: none;
+  }
   * {
     @apply border-border outline-ring/50;
   }
@@ -117,6 +123,13 @@
 @layer utilities {
   .font-display {
     font-family: var(--font-display);
+  }
+  .scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
   }
 }
 
