@@ -30,14 +30,17 @@ export function MarqueeText({ text, className }: MarqueeTextProps) {
   }, [text])
 
   return (
-    <div ref={containerRef} className={className} style={{ overflow: 'hidden' }}>
+    <div ref={containerRef} className={className} style={{ overflow: 'hidden' }} title={text}>
       <span
         ref={textRef}
         data-marquee={overflowPx > 0 || undefined}
         className="inline-block whitespace-nowrap"
         style={
           overflowPx > 0
-            ? ({ '--marquee-distance': `-${overflowPx}px` } as React.CSSProperties)
+            ? ({
+                '--marquee-distance': `-${overflowPx}px`,
+                '--marquee-duration': `${overflowPx / 18 / 0.6}s`,
+              } as React.CSSProperties)
             : undefined
         }
       >

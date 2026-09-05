@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { DonationChart } from '@/components/donation-chart'
+import { PageContainer, PageHeader } from '@/components/page-layout'
 import { StatsHeader } from '@/components/stats-header'
 import { ZeventDataGate } from '@/components/zevent-data-gate'
 import { useDonationHistory } from '@/hooks/use-donation-history'
@@ -15,13 +16,19 @@ export function OverviewPage() {
   )
 
   return (
-    <ZeventDataGate>
-      {(data) => (
-        <div className="space-y-6">
-          <StatsHeader data={data} lastUpdated={dataUpdatedAt} onlineCount={onlineCount} />
-          <DonationChart history={history} />
-        </div>
-      )}
-    </ZeventDataGate>
+    <PageContainer>
+      <PageHeader
+        title="Vue d'ensemble"
+        description="Les chiffres du ZEvent, actualisés automatiquement."
+      />
+      <ZeventDataGate>
+        {(data) => (
+          <>
+            <StatsHeader data={data} lastUpdated={dataUpdatedAt} onlineCount={onlineCount} />
+            <DonationChart history={history} />
+          </>
+        )}
+      </ZeventDataGate>
+    </PageContainer>
   )
 }

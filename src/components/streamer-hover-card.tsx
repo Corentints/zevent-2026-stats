@@ -38,16 +38,16 @@ export function StreamerHoverCard({
           >
             <AvatarImage src={streamer.profileUrl} alt={streamer.display} />
             <AvatarFallback className="text-xs">
-              {streamer.display.slice(0, 2).toUpperCase()}
+              {streamer.display.slice(0, 2)}
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex-1">
-            <p className="font-display truncate text-sm font-semibold">{streamer.display}</p>
+            <p className="truncate text-sm font-semibold">{streamer.display}</p>
             <p className="text-xs text-muted-foreground">
               #{rank} sur {totalStreamers}
             </p>
           </div>
-          <p className="font-display shrink-0 text-sm font-bold tabular-nums text-primary">
+          <p className="shrink-0 text-sm font-semibold tabular-nums text-primary">
             {formatEuros(streamer.donationAmount.number)}
           </p>
         </div>

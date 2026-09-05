@@ -40,27 +40,24 @@ export function StatsHeader({ data, lastUpdated, onlineCount }: StatsHeaderProps
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
       {stats.map((stat) => (
-        <Card
-          key={stat.label}
-          className="card-glow gap-0 border border-transparent py-0 transition-colors hover:border-primary/40"
-        >
+        <Card key={stat.label} className="gap-0 border border-border py-0 shadow-none">
           <CardContent className="flex items-center gap-3 px-4 py-4">
             <div
               className={
                 stat.tone === 'gold'
-                  ? 'flex size-10 shrink-0 items-center justify-center rounded-sm bg-gold text-gold-foreground'
+                  ? 'flex size-9 shrink-0 items-center justify-center rounded-sm bg-gold/10 text-gold'
                   : stat.tone === 'primary'
-                    ? 'flex size-10 shrink-0 items-center justify-center rounded-sm bg-primary text-primary-foreground'
-                    : 'flex size-10 shrink-0 items-center justify-center rounded-sm bg-secondary text-muted-foreground'
+                    ? 'flex size-9 shrink-0 items-center justify-center rounded-sm bg-primary/10 text-primary'
+                    : 'flex size-9 shrink-0 items-center justify-center rounded-sm bg-secondary text-muted-foreground'
               }
             >
               <stat.icon className="size-5" />
             </div>
             <div className="min-w-0">
-              <p className="truncate text-xs text-muted-foreground uppercase tracking-wide">
+              <p className="truncate text-xs text-muted-foreground">
                 {stat.label}
               </p>
-              <p className="font-display truncate text-lg font-bold tabular-nums">
+              <p className="truncate text-lg font-semibold tabular-nums">
                 {stat.value}
               </p>
             </div>

@@ -30,9 +30,9 @@ export function DonationChart({ history }: DonationChartProps) {
   const hasEnoughData = history.length >= 2
 
   return (
-    <Card className="card-glow">
+    <Card className="border border-border shadow-none">
       <CardHeader>
-        <CardTitle className="font-display text-lg uppercase tracking-wide">
+        <CardTitle className="text-lg">
           Courbe générale des dons
         </CardTitle>
         <CardDescription>

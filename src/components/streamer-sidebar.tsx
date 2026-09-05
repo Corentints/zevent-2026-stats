@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { Search } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import { MarqueeText } from '@/components/marquee-text'
 import { StreamerHoverCard } from '@/components/streamer-hover-card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -49,6 +49,11 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
     [streamers],
   )
 
+  const ranks = useMemo(
+    () => new Map(sorted.map((streamer, index) => [streamer.twitch_id, index + 1])),
+    [sorted],
+  )
+
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase()
     if (!query) return sorted
@@ -62,7 +67,7 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
           {isPending ? (
             <Skeleton className="h-3.5 w-24" />
           ) : (
-            <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+            <p className="text-xs font-medium text-muted-foreground">
               Streamers ({streamers.length})
             </p>
           )}
@@ -72,8 +77,19 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
               placeholder="Rechercher…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-8 focus-visible:ring-primary/50"
+              aria-label="Rechercher un streamer"
+              className="px-8 focus-visible:ring-primary/50"
             />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-sm p-0.5 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label="Effacer la recherche"
+              >
+                <X className="size-3.5" />
+              </button>
+            )}
           </div>
         </div>
 
@@ -95,7 +111,7 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
                   ? Math.min(100, (currentAmount / currentGoal.amountRequired) * 100)
                   : 0
 
-                const rank = sorted.indexOf(streamer) + 1
+                const rank = ranks.get(streamer.twitch_id) ?? 0
 
                 return (
                   <li key={streamer.twitch_id}>
@@ -120,13 +136,13 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
                           >
                             <AvatarImage src={streamer.profileUrl} alt={streamer.display} />
                             <AvatarFallback className="text-xs">
-                              {streamer.display.slice(0, 2).toUpperCase()}
+                              {streamer.display.slice(0, 2)}
                             </AvatarFallback>
                           </Avatar>
                           <span className="min-w-0 flex-1 truncate font-medium">
                             {streamer.display}
                           </span>
-                          <span className="font-display shrink-0 text-xs font-bold tabular-nums text-primary">
+                          <span className="shrink-0 text-xs font-semibold tabular-nums text-primary">
                             {formatEuros(currentAmount)}
                           </span>
                         </div>

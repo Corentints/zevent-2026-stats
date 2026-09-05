@@ -1,8 +1,15 @@
 import { StreamerTable } from '@/components/streamer-table'
+import { PageContainer, PageHeader } from '@/components/page-layout'
 import { ZeventDataGate } from '@/components/zevent-data-gate'
 
 export function LeaderboardPage() {
   return (
-    <ZeventDataGate>{(data) => <StreamerTable streamers={data.live} />}</ZeventDataGate>
+    <PageContainer>
+      <PageHeader
+        title="Classement"
+        description="Recherchez et comparez les collectes des streamers."
+      />
+      <ZeventDataGate>{(data) => <StreamerTable streamers={data.live} />}</ZeventDataGate>
+    </PageContainer>
   )
 }

@@ -66,7 +66,7 @@ export function StreamerTable({ streamers }: StreamerTableProps) {
         </div>
       </div>
 
-      <div className="card-glow overflow-hidden">
+      <div className="overflow-hidden rounded-sm border border-border bg-card">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -77,7 +77,7 @@ export function StreamerTable({ streamers }: StreamerTableProps) {
                   return (
                     <TableHead
                       key={header.id}
-                      className="text-xs font-semibold tracking-wide text-muted-foreground uppercase"
+                      className="text-xs font-medium text-muted-foreground"
                     >
                       {header.isPlaceholder ? null : (
                         <button

@@ -42,7 +42,7 @@ export const streamerColumns = columnHelper.columns([
             }
           >
             <AvatarImage src={streamer.profileUrl} alt={streamer.display} />
-            <AvatarFallback>{streamer.display.slice(0, 2).toUpperCase()}</AvatarFallback>
+            <AvatarFallback>{streamer.display.slice(0, 2)}</AvatarFallback>
           </Avatar>
           <span className="truncate">{streamer.display}</span>
         </Link>
@@ -88,7 +88,7 @@ export const streamerColumns = columnHelper.columns([
     header: 'Dons',
     enableGlobalFilter: false,
     cell: (info) => (
-      <span className="font-display font-bold tabular-nums text-primary">
+      <span className="font-semibold tabular-nums text-primary">
         {formatEuros(info.getValue())}
       </span>
     ),
