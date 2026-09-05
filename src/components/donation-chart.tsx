@@ -1,4 +1,4 @@
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts'
 import {
   ChartContainer,
   ChartTooltip,
@@ -24,25 +24,15 @@ export function DonationChart({ history }: DonationChartProps) {
 
   return (
     <section className="border-t border-border pt-5">
-      <header className="space-y-1">
+      <header className="flex items-baseline justify-between gap-4">
         <h2 className="text-base font-semibold">Évolution des dons</h2>
-        <p className="text-sm text-muted-foreground">
-          {hasEnoughData
-            ? `Évolution du total collecté depuis le début de la session (${history.length} points relevés)`
-            : "Les points s'accumulent au fil des rafraîchissements de l'API — revenez dans quelques minutes pour voir la courbe se dessiner."}
-        </p>
+        {hasEnoughData && <p className="text-xs tabular-nums text-muted-foreground">{history.length} relevés</p>}
       </header>
       <div className="mt-6">
         {hasEnoughData ? (
           <ChartContainer config={chartConfig} className="h-[280px] w-full">
-            <AreaChart data={history} margin={{ left: 8, right: 12, top: 8 }}>
-              <defs>
-                <linearGradient id="fillTotal" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--chart-1)" stopOpacity={0.4} />
-                  <stop offset="95%" stopColor="var(--chart-1)" stopOpacity={0.02} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid vertical={false} strokeDasharray="3 3" />
+            <LineChart data={history} margin={{ left: 8, right: 12, top: 8 }}>
+              <CartesianGrid vertical={false} strokeDasharray="2 6" />
               <XAxis
                 dataKey="time"
                 tickLine={false}
@@ -71,15 +61,15 @@ export function DonationChart({ history }: DonationChartProps) {
                   />
                 }
               />
-              <Area
+              <Line
                 dataKey="total"
                 type="monotone"
-                fill="url(#fillTotal)"
                 stroke="var(--chart-1)"
-                strokeWidth={2}
+                strokeWidth={1.75}
+                dot={false}
                 isAnimationActive={false}
               />
-            </AreaChart>
+            </LineChart>
           </ChartContainer>
         ) : (
           <div className="flex h-[280px] items-center justify-center text-sm text-muted-foreground">

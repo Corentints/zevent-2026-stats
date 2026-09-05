@@ -17,10 +17,7 @@ export function OverviewPage() {
 
   return (
     <PageContainer>
-      <PageHeader
-        title="Vue d'ensemble"
-        description="Dons, audience et progression de l'événement en direct."
-      />
+      <PageHeader title="Vue d'ensemble" />
       <ZeventDataGate>
         {(data) => (
           <>

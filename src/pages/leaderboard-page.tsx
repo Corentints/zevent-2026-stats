@@ -5,10 +5,7 @@ import { ZeventDataGate } from '@/components/zevent-data-gate'
 export function LeaderboardPage() {
   return (
     <PageContainer>
-      <PageHeader
-        title="Classement"
-        description="Les collectes individuelles, du montant le plus élevé au plus faible."
-      />
+      <PageHeader title="Classement" />
       <ZeventDataGate>{(data) => <StreamerTable streamers={data.live} />}</ZeventDataGate>
     </PageContainer>
   )

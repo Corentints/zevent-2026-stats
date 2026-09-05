@@ -1,8 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { createColumnHelper } from '@tanstack/react-table'
-import { ArrowUpRight, ExternalLink } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { zeventTableFeatures } from '@/lib/table-features'
 import { formatEuros, formatNumber } from '@/lib/format'
@@ -53,16 +52,16 @@ export const streamerColumns = columnHelper.columns([
     header: 'Statut',
     enableGlobalFilter: false,
     cell: (info) => (
-      <Badge variant={info.getValue() ? 'default' : 'secondary'} className="gap-1.5">
+      <span className={info.getValue() ? 'inline-flex items-center gap-2 text-sm' : 'inline-flex items-center gap-2 text-sm text-muted-foreground'}>
         <span
           className={
             info.getValue()
-              ? 'size-1.5 shrink-0 animate-pulse rounded-full bg-primary-foreground'
+              ? 'size-1.5 shrink-0 rounded-full bg-primary'
               : 'size-1.5 shrink-0 rounded-full bg-muted-foreground'
           }
         />
         {info.getValue() ? 'En ligne' : 'Hors ligne'}
-      </Badge>
+      </span>
     ),
     sortFn: (a, b) => Number(a.original.online) - Number(b.original.online),
   }),
@@ -98,7 +97,7 @@ export const streamerColumns = columnHelper.columns([
     cell: (info) => (
       <Button asChild size="sm" className="bg-gold text-gold-foreground hover:bg-gold/90">
         <a href={info.row.original.donationUrl} target="_blank" rel="noreferrer">
-          Donner <ArrowUpRight className="size-3.5" />
+          Donner
         </a>
       </Button>
     ),

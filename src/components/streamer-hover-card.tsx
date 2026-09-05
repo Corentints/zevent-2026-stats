@@ -22,7 +22,6 @@ export function StreamerHoverCard({
   const [open, setOpen] = useState(false)
   const history = useStreamerHistory(streamer.twitch_id, open)
   const points = history.data ?? []
-  const gradientId = `hovercard-fill-${streamer.twitch_id}`
 
   return (
     <HoverCard open={open} onOpenChange={setOpen} openDelay={300} closeDelay={100}>
@@ -50,18 +49,12 @@ export function StreamerHoverCard({
           {points.length >= 2 ? (
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={points} margin={{ top: 2, right: 0, bottom: 0, left: 0 }}>
-                <defs>
-                  <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--chart-1)" stopOpacity={0.4} />
-                    <stop offset="95%" stopColor="var(--chart-1)" stopOpacity={0.02} />
-                  </linearGradient>
-                </defs>
                 <Area
                   dataKey="amount"
                   type="monotone"
                   stroke="var(--chart-1)"
                   strokeWidth={1.5}
-                  fill={`url(#${gradientId})`}
+                  fill="transparent"
                   isAnimationActive={false}
                 />
               </AreaChart>

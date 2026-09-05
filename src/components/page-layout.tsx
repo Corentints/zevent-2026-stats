@@ -19,11 +19,11 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, leading, actions }: PageHeaderProps) {
   return (
-    <header className="flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
+    <header className="flex flex-col gap-5 border-b border-border pb-7 sm:flex-row sm:items-end sm:justify-between">
       <div className="flex min-w-0 items-center gap-4">
         {leading}
-        <div className="min-w-0 space-y-1">
-          <h1 className="truncate text-2xl font-semibold tracking-[-0.03em]">{title}</h1>
+        <div className="min-w-0 space-y-1.5">
+          <h1 className="truncate text-[1.75rem] font-medium tracking-[-0.04em] sm:text-[2rem]">{title}</h1>
           {description && <div className="text-sm text-muted-foreground">{description}</div>}
         </div>
       </div>

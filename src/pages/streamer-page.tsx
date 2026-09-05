@@ -1,6 +1,6 @@
 import { useLayoutEffect, useMemo, useRef } from 'react'
 import { Link, useParams } from '@tanstack/react-router'
-import { ArrowLeft, ExternalLink, Gamepad2, Heart, Users } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Heart } from 'lucide-react'
 import { PageContainer, PageHeader } from '@/components/page-layout'
 import { StreamerDonationChart } from '@/components/streamer-donation-chart'
 import { StreamerViewersChart } from '@/components/streamer-viewers-chart'
@@ -113,15 +113,9 @@ export function StreamerPage() {
               <ExternalLink className="size-3.5" />
             </a>
             {streamer.game && (
-              <span className="inline-flex items-center gap-1">
-                <Gamepad2 className="size-3.5" />
-                {streamer.game}
-              </span>
+              <span>{streamer.game}</span>
             )}
-            <span className="inline-flex items-center gap-1">
-              <Users className="size-3.5" />
-              {formatNumber(streamer.viewersAmount.number)} spectateurs
-            </span>
+            <span>{formatNumber(streamer.viewersAmount.number)} spectateurs</span>
           </div>
         }
         actions={
