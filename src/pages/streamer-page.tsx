@@ -148,8 +148,8 @@ export function StreamerPage() {
           />
         </div>
 
-        <Card className="gap-0 rounded-none border-0 border-t border-border bg-transparent py-0 shadow-none xl:sticky xl:top-20">
-          <CardHeader className="px-0 py-5">
+        <Card className="gap-0 rounded-none border-0 border-t border-border bg-transparent py-0 shadow-none xl:sticky xl:top-20 xl:max-h-[calc(100vh-16rem)] xl:overflow-hidden">
+          <CardHeader className="shrink-0 px-0 py-5">
             <CardTitle className="text-lg">Objectifs de dons</CardTitle>
             <CardDescription>
               {sortedGoals.length > 0
@@ -162,7 +162,7 @@ export function StreamerPage() {
             <CardContent
               key={twitchId}
               ref={goalsScrollRef}
-              className="scrollbar-modern max-h-[70vh] overflow-y-auto px-0 xl:max-h-[calc(100vh-19.5rem)]"
+              className="scrollbar-modern max-h-[70vh] overflow-y-auto px-0 xl:min-h-0 xl:flex-1 xl:max-h-none"
             >
               {sortedGoals.map((goal) => {
                 const reached = currentAmount >= goal.amountRequired
