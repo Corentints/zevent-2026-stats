@@ -29,13 +29,7 @@ export function StreamerHoverCard({
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
       <HoverCardContent side="right" align="start" className="w-64">
         <div className="flex items-center gap-2.5">
-          <Avatar
-            className={
-              streamer.online
-                ? 'size-9 shrink-0 ring-2 ring-primary ring-offset-2 ring-offset-background'
-                : 'size-9 shrink-0'
-            }
-          >
+          <Avatar className={streamer.online ? 'size-9 shrink-0' : 'size-9 shrink-0 opacity-65'}>
             <AvatarImage src={streamer.profileUrl} alt={streamer.display} />
             <AvatarFallback className="text-xs">
               {streamer.display.slice(0, 2)}
@@ -47,7 +41,7 @@ export function StreamerHoverCard({
               #{rank} sur {totalStreamers}
             </p>
           </div>
-          <p className="shrink-0 text-sm font-semibold tabular-nums text-primary">
+          <p className="shrink-0 text-sm font-semibold tabular-nums text-foreground">
             {formatEuros(streamer.donationAmount.number)}
           </p>
         </div>

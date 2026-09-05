@@ -7,7 +7,7 @@ export function LeaderboardPage() {
     <PageContainer>
       <PageHeader
         title="Classement"
-        description="Recherchez et comparez les collectes des streamers."
+        description="Les collectes individuelles, du montant le plus élevé au plus faible."
       />
       <ZeventDataGate>{(data) => <StreamerTable streamers={data.live} />}</ZeventDataGate>
     </PageContainer>

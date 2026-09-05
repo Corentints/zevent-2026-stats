@@ -34,16 +34,15 @@ export const streamerColumns = columnHelper.columns([
           params={{ twitchId: streamer.twitch_id }}
           className="flex items-center gap-2 font-medium hover:text-primary hover:underline"
         >
-          <Avatar
-            className={
-              streamer.online
-                ? 'size-8 ring-2 ring-primary ring-offset-2 ring-offset-background'
-                : 'size-8'
-            }
-          >
-            <AvatarImage src={streamer.profileUrl} alt={streamer.display} />
-            <AvatarFallback>{streamer.display.slice(0, 2)}</AvatarFallback>
-          </Avatar>
+          <span className="relative shrink-0">
+            <Avatar className={streamer.online ? 'size-8' : 'size-8 opacity-65'}>
+              <AvatarImage src={streamer.profileUrl} alt={streamer.display} />
+              <AvatarFallback>{streamer.display.slice(0, 2)}</AvatarFallback>
+            </Avatar>
+            {streamer.online && (
+              <span className="absolute right-0 bottom-0 size-2.5 rounded-full border-2 border-background bg-primary" />
+            )}
+          </span>
           <span className="truncate">{streamer.display}</span>
         </Link>
       )
@@ -88,7 +87,7 @@ export const streamerColumns = columnHelper.columns([
     header: 'Dons',
     enableGlobalFilter: false,
     cell: (info) => (
-      <span className="font-semibold tabular-nums text-primary">
+      <span className="font-semibold tabular-nums text-foreground">
         {formatEuros(info.getValue())}
       </span>
     ),

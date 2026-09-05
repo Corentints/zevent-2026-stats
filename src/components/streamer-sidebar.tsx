@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { Search, X } from 'lucide-react'
+import { ChevronDown, Search, X } from 'lucide-react'
 import { MarqueeText } from '@/components/marquee-text'
 import { StreamerHoverCard } from '@/components/streamer-hover-card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useDonationGoals } from '@/hooks/use-donation-goals'
 import { formatEuros } from '@/lib/format'
+import { cn } from 'cn'
 import type { DonationGoal, Streamer } from '@/types/zevent'
 
 interface StreamerSidebarProps {
@@ -42,6 +43,7 @@ function SidebarRowSkeleton({ withGoal }: { withGoal: boolean }) {
 
 export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) {
   const [search, setSearch] = useState('')
+  const [mobileOpen, setMobileOpen] = useState(false)
   const goals = useDonationGoals()
 
   const sorted = useMemo(
@@ -61,14 +63,33 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
   }, [sorted, search])
 
   return (
-    <aside className="w-full shrink-0 border-b border-border/60 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:w-80 lg:border-r lg:border-b-0">
-      <div className="flex max-h-96 flex-col lg:h-full lg:max-h-none">
+    <aside className="w-full shrink-0 border-b border-border lg:sticky lg:top-14 lg:h-[calc(100vh-3.5rem)] lg:w-72 lg:border-r lg:border-b-0">
+      <button
+        type="button"
+        onClick={() => setMobileOpen((open) => !open)}
+        className="flex w-full items-center justify-between px-4 py-3 text-sm lg:hidden"
+        aria-expanded={mobileOpen}
+        aria-controls="streamer-directory"
+      >
+        <span>{streamers.length} streamers</span>
+        <ChevronDown
+          className={cn('size-4 text-muted-foreground transition-transform', mobileOpen && 'rotate-180')}
+        />
+      </button>
+
+      <div
+        id="streamer-directory"
+        className={cn(
+          'max-h-96 flex-col lg:flex lg:h-full lg:max-h-none',
+          mobileOpen ? 'flex' : 'hidden',
+        )}
+      >
         <div className="space-y-2 px-4 py-3">
           {isPending ? (
             <Skeleton className="h-3.5 w-24" />
           ) : (
-            <p className="text-xs font-medium text-muted-foreground">
-              Streamers ({streamers.length})
+            <p className="hidden text-xs font-medium text-muted-foreground lg:block">
+              {streamers.length} streamers
             </p>
           )}
           <div className="relative">
@@ -123,26 +144,26 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
                       <Link
                         to="/streamer/$twitchId"
                         params={{ twitchId: streamer.twitch_id }}
-                        className="group flex flex-col gap-1.5 rounded-sm px-2 py-2 text-sm transition-colors hover:bg-accent"
-                        activeProps={{ className: 'bg-primary/10 hover:bg-primary/10' }}
+                        onClick={() => setMobileOpen(false)}
+                        className="group flex flex-col gap-1.5 border-l-2 border-transparent px-2 py-2 text-sm transition-colors hover:bg-accent/60"
+                        activeProps={{ className: 'border-primary bg-accent/70 hover:bg-accent/70' }}
                       >
                         <div className="flex items-center gap-2.5">
-                          <Avatar
-                            className={
-                              streamer.online
-                                ? 'size-8 shrink-0 ring-2 ring-primary ring-offset-2 ring-offset-background'
-                                : 'size-8 shrink-0'
-                            }
-                          >
-                            <AvatarImage src={streamer.profileUrl} alt={streamer.display} />
-                            <AvatarFallback className="text-xs">
-                              {streamer.display.slice(0, 2)}
-                            </AvatarFallback>
-                          </Avatar>
+                          <span className="relative shrink-0">
+                            <Avatar className={streamer.online ? 'size-8' : 'size-8 opacity-65'}>
+                              <AvatarImage src={streamer.profileUrl} alt={streamer.display} />
+                              <AvatarFallback className="text-xs">
+                                {streamer.display.slice(0, 2)}
+                              </AvatarFallback>
+                            </Avatar>
+                            {streamer.online && (
+                              <span className="absolute right-0 bottom-0 size-2.5 rounded-full border-2 border-background bg-primary" />
+                            )}
+                          </span>
                           <span className="min-w-0 flex-1 truncate font-medium">
                             {streamer.display}
                           </span>
-                          <span className="shrink-0 text-xs font-semibold tabular-nums text-primary">
+                          <span className="shrink-0 text-xs font-medium tabular-nums text-foreground">
                             {formatEuros(currentAmount)}
                           </span>
                         </div>
@@ -155,7 +176,7 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
                             />
                             <div className="h-1 w-full overflow-hidden rounded-sm bg-secondary">
                               <div
-                                className="h-full rounded-sm bg-primary"
+                                className="h-full rounded-sm bg-primary/70"
                                 style={{ width: `${progress}%` }}
                               />
                             </div>

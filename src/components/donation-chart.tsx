@@ -1,12 +1,5 @@
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -30,18 +23,16 @@ export function DonationChart({ history }: DonationChartProps) {
   const hasEnoughData = history.length >= 2
 
   return (
-    <Card className="border border-border shadow-none">
-      <CardHeader>
-        <CardTitle className="text-lg">
-          Courbe générale des dons
-        </CardTitle>
-        <CardDescription>
+    <section className="border-t border-border pt-5">
+      <header className="space-y-1">
+        <h2 className="text-base font-semibold">Évolution des dons</h2>
+        <p className="text-sm text-muted-foreground">
           {hasEnoughData
             ? `Évolution du total collecté depuis le début de la session (${history.length} points relevés)`
             : "Les points s'accumulent au fil des rafraîchissements de l'API — revenez dans quelques minutes pour voir la courbe se dessiner."}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+        </p>
+      </header>
+      <div className="mt-6">
         {hasEnoughData ? (
           <ChartContainer config={chartConfig} className="h-[280px] w-full">
             <AreaChart data={history} margin={{ left: 8, right: 12, top: 8 }}>
@@ -95,7 +86,7 @@ export function DonationChart({ history }: DonationChartProps) {
             En attente de données historiques…
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   )
 }

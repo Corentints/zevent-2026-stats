@@ -84,11 +84,7 @@ export function StreamerPage() {
       <PageHeader
         leading={
           <Avatar
-            className={
-              streamer.online
-                ? 'size-14 shrink-0 ring-2 ring-primary ring-offset-2 ring-offset-background'
-                : 'size-14 shrink-0'
-            }
+            className={streamer.online ? 'size-14 shrink-0' : 'size-14 shrink-0 opacity-70'}
           >
             <AvatarImage src={streamer.profileUrl} alt={streamer.display} />
             <AvatarFallback>{streamer.display.slice(0, 2)}</AvatarFallback>
@@ -158,8 +154,8 @@ export function StreamerPage() {
           />
         </div>
 
-        <Card className="border border-border shadow-none xl:sticky xl:top-20">
-          <CardHeader>
+        <Card className="gap-0 rounded-none border-0 border-t border-border bg-transparent py-0 shadow-none xl:sticky xl:top-20">
+          <CardHeader className="px-0 py-5">
             <CardTitle className="text-lg">Objectifs de dons</CardTitle>
             <CardDescription>
               {sortedGoals.length > 0
@@ -172,7 +168,7 @@ export function StreamerPage() {
             <CardContent
               key={twitchId}
               ref={goalsScrollRef}
-              className="max-h-[70vh] overflow-y-auto px-3"
+              className="max-h-[70vh] overflow-y-auto px-0"
             >
               {sortedGoals.map((goal) => {
                 const reached = currentAmount >= goal.amountRequired

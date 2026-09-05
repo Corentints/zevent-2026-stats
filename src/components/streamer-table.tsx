@@ -66,7 +66,7 @@ export function StreamerTable({ streamers }: StreamerTableProps) {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-sm border border-border bg-card">
+      <div className="overflow-hidden border-y border-border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

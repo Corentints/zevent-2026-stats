@@ -17,14 +17,14 @@ const navLinks = [
 
 function NavLinks({ className }: { className?: string }) {
   return (
-    <nav className={cn('flex items-center gap-4', className)}>
+    <nav className={cn('flex items-center gap-5', className)} aria-label="Navigation principale">
       {navLinks.map((link) => (
         <Link
           key={link.to}
           to={link.to}
-          className="text-sm font-medium text-white transition-colors hover:text-primary"
+          className="border-b border-transparent py-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
           activeOptions={{ exact: true }}
-          activeProps={{ className: 'text-primary' }}
+          activeProps={{ className: 'border-foreground text-foreground' }}
         >
           {link.label}
         </Link>
@@ -35,10 +35,18 @@ function NavLinks({ className }: { className?: string }) {
 
 export function Navbar({ data, isFetching, onRefresh }: NavbarProps) {
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-background">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur">
       <div className="px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between gap-4">
-          <NavLinks className="hidden sm:flex" />
+        <div className="flex h-14 items-center justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-8">
+            <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="ZEvent stats">
+              <span className="grid size-6 place-items-center border border-primary text-xs font-bold text-primary">
+                Z
+              </span>
+              <span className="hidden text-sm font-semibold sm:inline">ZEvent stats</span>
+            </Link>
+            <NavLinks className="hidden sm:flex" />
+          </div>
 
           <div className="flex shrink-0 items-center gap-2">
             <Button variant="ghost" size="sm" onClick={onRefresh} disabled={isFetching}>
@@ -56,7 +64,7 @@ export function Navbar({ data, isFetching, onRefresh }: NavbarProps) {
           </div>
         </div>
 
-        <NavLinks className="mb-3 sm:hidden" />
+        <NavLinks className="pb-3 sm:hidden" />
       </div>
     </header>
   )

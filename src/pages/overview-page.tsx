@@ -19,7 +19,7 @@ export function OverviewPage() {
     <PageContainer>
       <PageHeader
         title="Vue d'ensemble"
-        description="Les chiffres du ZEvent, actualisés automatiquement."
+        description="Dons, audience et progression de l'événement en direct."
       />
       <ZeventDataGate>
         {(data) => (
