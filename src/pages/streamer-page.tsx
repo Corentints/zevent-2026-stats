@@ -148,7 +148,7 @@ export function StreamerPage() {
           />
         </div>
 
-        <Card className="gap-0 rounded-none border-0 border-t border-border bg-transparent py-0 shadow-none xl:sticky xl:top-20 xl:max-h-[calc(100vh-16rem)] xl:overflow-hidden">
+        <Card className="gap-0 rounded-none border-0 bg-transparent py-0 shadow-none xl:sticky xl:top-20 xl:max-h-[calc(100vh-16rem)] xl:overflow-hidden">
           <CardHeader className="shrink-0 px-0 py-5">
             <CardTitle className="text-lg">Objectifs de dons</CardTitle>
             <CardDescription>

@@ -24,7 +24,7 @@ export function StreamerViewersChart({ history, isConfigured }: StreamerViewersC
   const hasEnoughData = history.length >= 2
 
   return (
-    <section className="border-t border-border pt-5 min-[1440px]:pt-4">
+    <section>
       <header className="flex items-baseline justify-between gap-4">
         <h2 className="text-base font-semibold">Audience</h2>
         {hasEnoughData && <p className="text-xs tabular-nums text-muted-foreground">{history.length} relevés</p>}

@@ -20,7 +20,7 @@ function StreamerList({
   value: (streamer: Streamer) => string
 }) {
   return (
-    <ol className="divide-y divide-border border-y border-border">
+    <ol className="divide-y divide-border/70">
       {streamers.map((streamer, index) => (
         <li key={streamer.twitch_id}>
           <Link
@@ -108,7 +108,7 @@ export function OverviewInsights({ history, streamers }: OverviewInsightsProps) 
   ]
 
   return (
-    <section className="space-y-8 border-t border-border pt-5">
+    <section className="space-y-8">
       <div>
         <h2 className="text-base font-semibold">Quelques repères</h2>
         <dl className="mt-4 grid grid-cols-2 gap-x-6 gap-y-5 lg:grid-cols-4">
@@ -149,7 +149,7 @@ export function OverviewInsights({ history, streamers }: OverviewInsightsProps) 
               value={(streamer) => formatNumber(streamer.viewersAmount.number)}
             />
           ) : (
-            <p className="border-y border-border py-6 text-sm text-muted-foreground">
+            <p className="py-6 text-sm text-muted-foreground">
               Aucune chaîne en direct pour le moment.
             </p>
           )}

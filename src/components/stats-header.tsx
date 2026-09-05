@@ -19,16 +19,9 @@ export function StatsHeader({ data, lastUpdated, onlineCount }: StatsHeaderProps
   ]
 
   return (
-    <dl className="grid grid-cols-2 border-y border-border sm:grid-cols-4">
-      {stats.map((stat, index) => (
-        <div
-          key={stat.label}
-          className={
-            index % 2 === 0
-              ? 'py-4 pr-4 sm:border-r sm:px-5 sm:first:pl-0'
-              : 'border-l border-border py-4 pl-4 sm:border-l-0 sm:border-r sm:px-5 sm:last:border-r-0 sm:last:pr-0'
-          }
-        >
+    <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4">
+      {stats.map((stat) => (
+        <div key={stat.label}>
           <dt className="text-xs text-muted-foreground">{stat.label}</dt>
           <dd
             className={
