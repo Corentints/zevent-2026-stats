@@ -108,7 +108,7 @@ export function OverviewInsights({ history, streamers }: OverviewInsightsProps) 
   ]
 
   return (
-    <section className="space-y-8">
+    <section className="space-y-8 border-t border-border/60 pt-6">
       <div>
         <h2 className="text-base font-semibold">Quelques repères</h2>
         <dl className="mt-4 grid grid-cols-2 gap-x-6 gap-y-5 lg:grid-cols-4">

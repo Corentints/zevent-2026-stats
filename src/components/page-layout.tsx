@@ -19,7 +19,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, leading, actions }: PageHeaderProps) {
   return (
-    <header className="flex flex-col gap-5 pb-2 sm:flex-row sm:items-end sm:justify-between">
+    <header className="flex flex-col gap-5 border-b border-border/60 pb-6 sm:flex-row sm:items-end sm:justify-between">
       <div className="flex min-w-0 items-center gap-4">
         {leading}
         <div className="min-w-0 space-y-1.5">

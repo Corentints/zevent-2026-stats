@@ -137,7 +137,7 @@ export function StreamerPage() {
       />
 
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
-        <div className="grid min-w-0 gap-6 min-[1440px]:gap-5">
+        <div className="grid min-w-0 gap-6 min-[1440px]:gap-5 [&>section+section]:border-t [&>section+section]:border-border/60 [&>section+section]:pt-6 min-[1440px]:[&>section+section]:pt-5">
           <StreamerDonationChart
             history={history.data ?? []}
             isConfigured={Boolean(HISTORY_API_URL)}
@@ -148,7 +148,7 @@ export function StreamerPage() {
           />
         </div>
 
-        <Card className="gap-0 rounded-none border-0 bg-transparent py-0 shadow-none xl:sticky xl:top-20 xl:max-h-[calc(100vh-16rem)] xl:overflow-hidden">
+        <Card className="gap-0 rounded-none border-0 bg-transparent py-0 shadow-none xl:sticky xl:top-20 xl:max-h-[calc(100vh-16rem)] xl:overflow-hidden xl:border-l xl:border-border/60 xl:pl-6">
           <CardHeader className="shrink-0 px-0 py-5">
             <CardTitle className="text-lg">Objectifs de dons</CardTitle>
             <CardDescription>
