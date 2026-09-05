@@ -1,10 +1,10 @@
 import { useLayoutEffect, useMemo, useRef } from 'react'
 import { Link, useParams } from '@tanstack/react-router'
-import { ArrowLeft, ExternalLink, Heart } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { PageContainer, PageHeader } from '@/components/page-layout'
 import { StreamerDonationChart } from '@/components/streamer-donation-chart'
+import { StreamerHero } from '@/components/streamer-hero'
 import { StreamerViewersChart } from '@/components/streamer-viewers-chart'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -12,7 +12,7 @@ import { useDonationGoals } from '@/hooks/use-donation-goals'
 import { useStreamerHistory } from '@/hooks/use-streamer-history'
 import { useZeventData } from '@/hooks/use-zevent-data'
 import { HISTORY_API_URL } from '@/lib/history-api'
-import { formatEuros, formatNumber } from '@/lib/format'
+import { formatEuros } from '@/lib/format'
 
 export function StreamerPage() {
   const { twitchId } = useParams({ from: '/streamer/$twitchId' })
@@ -81,60 +81,7 @@ export function StreamerPage() {
 
   return (
     <PageContainer>
-      <PageHeader
-        leading={
-          <Avatar
-            className={streamer.online ? 'size-14 shrink-0' : 'size-14 shrink-0 opacity-70'}
-          >
-            <AvatarImage src={streamer.profileUrl} alt={streamer.display} />
-            <AvatarFallback>{streamer.display.slice(0, 2)}</AvatarFallback>
-          </Avatar>
-        }
-        title={streamer.display}
-        description={
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <span className="inline-flex items-center gap-1.5">
-              <span
-                className={
-                  streamer.online
-                    ? 'size-2 rounded-full bg-primary'
-                    : 'size-2 rounded-full bg-muted-foreground/50'
-                }
-              />
-              {streamer.online ? 'En ligne' : 'Hors ligne'}
-            </span>
-            <a
-              href={`https://twitch.tv/${streamer.twitch}`}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 hover:text-primary hover:underline"
-            >
-              twitch.tv/{streamer.twitch}
-              <ExternalLink className="size-3.5" />
-            </a>
-            {streamer.game && (
-              <span>{streamer.game}</span>
-            )}
-            <span>{formatNumber(streamer.viewersAmount.number)} spectateurs</span>
-          </div>
-        }
-        actions={
-          <div className="flex items-center gap-4 sm:justify-end">
-            <div className="text-left sm:text-right">
-              <p className="text-2xl font-semibold tabular-nums text-primary">
-                {formatEuros(currentAmount)}
-              </p>
-              <p className="text-xs text-muted-foreground">collectés</p>
-            </div>
-            <Button asChild size="sm" className="bg-gold text-gold-foreground hover:bg-gold/90">
-              <a href={streamer.donationUrl} target="_blank" rel="noreferrer">
-                <Heart className="size-3.5" />
-                Faire un don
-              </a>
-            </Button>
-          </div>
-        }
-      />
+      <StreamerHero streamer={streamer} />
 
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
         <div className="grid min-w-0 gap-6 min-[1440px]:gap-5 [&>section+section]:border-t [&>section+section]:border-border/60 [&>section+section]:pt-6 min-[1440px]:[&>section+section]:pt-5">
@@ -148,7 +95,7 @@ export function StreamerPage() {
           />
         </div>
 
-        <Card className="gap-0 rounded-none border-0 bg-transparent py-0 shadow-none xl:sticky xl:top-20 xl:max-h-[calc(100vh-16rem)] xl:overflow-hidden xl:border-l xl:border-border/60 xl:pl-6">
+        <Card className="gap-0 rounded-none border-0 bg-transparent py-0 shadow-none xl:sticky xl:top-20 xl:max-h-[calc(100vh-18.125rem)] xl:overflow-hidden xl:border-l xl:border-border/60 xl:pl-6">
           <CardHeader className="shrink-0 px-0 py-5">
             <CardTitle className="text-lg">Objectifs de dons</CardTitle>
             <CardDescription>
