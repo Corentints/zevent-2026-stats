@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { DonationChart } from '@/components/donation-chart'
+import { OverviewInsights } from '@/components/overview-insights'
 import { PageContainer, PageHeader } from '@/components/page-layout'
 import { StatsHeader } from '@/components/stats-header'
 import { ZeventDataGate } from '@/components/zevent-data-gate'
@@ -23,6 +24,7 @@ export function OverviewPage() {
           <>
             <StatsHeader data={data} lastUpdated={dataUpdatedAt} onlineCount={onlineCount} />
             <DonationChart history={history} />
+            <OverviewInsights history={history} streamers={data.live} />
           </>
         )}
       </ZeventDataGate>
