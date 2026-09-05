@@ -24,14 +24,14 @@ export function StreamerViewersChart({ history, isConfigured }: StreamerViewersC
   const hasEnoughData = history.length >= 2
 
   return (
-    <section className="border-t border-border pt-5">
+    <section className="border-t border-border pt-5 min-[1440px]:pt-4">
       <header className="flex items-baseline justify-between gap-4">
         <h2 className="text-base font-semibold">Audience</h2>
         {hasEnoughData && <p className="text-xs tabular-nums text-muted-foreground">{history.length} relevés</p>}
       </header>
-      <div className="mt-6">
+      <div className="mt-6 min-[1440px]:mt-4">
         {hasEnoughData ? (
-          <ChartContainer config={chartConfig} className="h-[280px] w-full">
+          <ChartContainer config={chartConfig} className="h-[280px] w-full min-[1440px]:h-[200px]">
             <AreaChart data={history} margin={{ left: 8, right: 12, top: 8 }}>
               <defs>
                 <linearGradient id="fillStreamerViewers" x1="0" y1="0" x2="0" y2="1">
@@ -76,7 +76,7 @@ export function StreamerViewersChart({ history, isConfigured }: StreamerViewersC
             </AreaChart>
           </ChartContainer>
         ) : (
-          <div className="flex h-[280px] items-center justify-center text-sm text-muted-foreground">
+          <div className="flex h-[280px] items-center justify-center text-sm text-muted-foreground min-[1440px]:h-[200px]">
             {isConfigured ? 'En attente de données historiques…' : 'Historique indisponible.'}
           </div>
         )}

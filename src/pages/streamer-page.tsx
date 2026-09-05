@@ -137,7 +137,7 @@ export function StreamerPage() {
       />
 
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
-        <div className="grid min-w-0 gap-6 min-[1440px]:grid-cols-2">
+        <div className="grid min-w-0 gap-6 min-[1440px]:gap-5">
           <StreamerDonationChart
             history={history.data ?? []}
             isConfigured={Boolean(HISTORY_API_URL)}
