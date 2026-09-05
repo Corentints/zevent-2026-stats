@@ -3,6 +3,7 @@ import { Area, AreaChart, ResponsiveContainer } from 'recharts'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { useStreamerHistory } from '@/hooks/use-streamer-history'
+import { smoothSeries } from '@/lib/chart-data'
 import { formatEuros } from '@/lib/format'
 import type { Streamer } from '@/types/zevent'
 
@@ -22,6 +23,7 @@ export function StreamerHoverCard({
   const [open, setOpen] = useState(false)
   const history = useStreamerHistory(streamer.twitch_id, open)
   const points = history.data ?? []
+  const chartData = smoothSeries(points, (point) => point.amount)
   const gradientId = `hovercard-fill-${streamer.twitch_id}`
 
   return (
@@ -49,7 +51,7 @@ export function StreamerHoverCard({
         <div className="mt-3 h-14 w-full">
           {points.length >= 2 ? (
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={points} margin={{ top: 2, right: 0, bottom: 0, left: 0 }}>
+              <AreaChart data={chartData} margin={{ top: 2, right: 0, bottom: 0, left: 0 }}>
                 <defs>
                   <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="var(--chart-1)" stopOpacity={0.32} />
@@ -57,8 +59,8 @@ export function StreamerHoverCard({
                   </linearGradient>
                 </defs>
                 <Area
-                  dataKey="amount"
-                  type="bumpX"
+                  dataKey="smoothed"
+                  type="natural"
                   stroke="var(--chart-1)"
                   strokeWidth={1.5}
                   strokeLinecap="round"

@@ -5,11 +5,12 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart'
+import { getTooltipNumber, smoothSeries } from '@/lib/chart-data'
 import { formatDateTime, formatEuros, formatNumber } from '@/lib/format'
 import type { StreamerHistoryPoint } from '@/types/zevent'
 
 const chartConfig = {
-  amount: {
+  smoothed: {
     label: 'Dons reçus',
     color: 'var(--chart-1)',
   },
@@ -25,6 +26,7 @@ export function StreamerDonationChart({ history, isConfigured }: StreamerDonatio
   const firstPoint = history[0]
   const lastPoint = history.at(-1)
   const delta = firstPoint && lastPoint ? Math.max(0, lastPoint.amount - firstPoint.amount) : 0
+  const chartData = smoothSeries(history, (point) => point.amount)
 
   return (
     <section>
@@ -40,7 +42,7 @@ export function StreamerDonationChart({ history, isConfigured }: StreamerDonatio
             config={chartConfig}
             className="h-[280px] w-full min-[1440px]:h-[clamp(140px,calc((100vh-24rem)/2),200px)]"
           >
-            <AreaChart data={history} margin={{ left: 8, right: 12, top: 8 }}>
+            <AreaChart data={chartData} margin={{ left: 8, right: 12, top: 8 }}>
               <defs>
                 <linearGradient id="fillStreamerAmount" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="var(--chart-1)" stopOpacity={0.32} />
@@ -69,13 +71,16 @@ export function StreamerDonationChart({ history, isConfigured }: StreamerDonatio
                       const time = payload?.[0]?.payload?.time
                       return typeof time === 'number' ? formatDateTime(time) : ''
                     }}
-                    formatter={(value) => [formatEuros(Number(value)), ' Dons']}
+                    formatter={(value, _name, _item, _index, payload) => [
+                      formatEuros(getTooltipNumber(payload, 'amount', value)),
+                      ' Dons',
+                    ]}
                   />
                 }
               />
               <Area
-                dataKey="amount"
-                type="bumpX"
+                dataKey="smoothed"
+                type="natural"
                 fill="url(#fillStreamerAmount)"
                 stroke="var(--chart-1)"
                 strokeWidth={1.75}

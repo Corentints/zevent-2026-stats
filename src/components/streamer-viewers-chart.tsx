@@ -5,11 +5,12 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart'
+import { getTooltipNumber, smoothSeries } from '@/lib/chart-data'
 import { formatDateTime, formatNumber } from '@/lib/format'
 import type { StreamerHistoryPoint } from '@/types/zevent'
 
 const chartConfig = {
-  viewers: {
+  smoothed: {
     label: 'Spectateurs',
     color: 'var(--chart-3)',
   },
@@ -23,6 +24,7 @@ interface StreamerViewersChartProps {
 export function StreamerViewersChart({ history, isConfigured }: StreamerViewersChartProps) {
   const hasEnoughData = history.length >= 2
   const peakViewers = history.reduce((peak, point) => Math.max(peak, point.viewers), 0)
+  const chartData = smoothSeries(history, (point) => point.viewers)
 
   return (
     <section>
@@ -40,7 +42,7 @@ export function StreamerViewersChart({ history, isConfigured }: StreamerViewersC
             config={chartConfig}
             className="h-[280px] w-full min-[1440px]:h-[clamp(140px,calc((100vh-24rem)/2),200px)]"
           >
-            <AreaChart data={history} margin={{ left: 8, right: 12, top: 8 }}>
+            <AreaChart data={chartData} margin={{ left: 8, right: 12, top: 8 }}>
               <defs>
                 <linearGradient id="fillStreamerViewers" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="var(--chart-3)" stopOpacity={0.32} />
@@ -69,13 +71,16 @@ export function StreamerViewersChart({ history, isConfigured }: StreamerViewersC
                       const time = payload?.[0]?.payload?.time
                       return typeof time === 'number' ? formatDateTime(time) : ''
                     }}
-                    formatter={(value) => [formatNumber(Number(value)), ' Spectateurs']}
+                    formatter={(value, _name, _item, _index, payload) => [
+                      formatNumber(getTooltipNumber(payload, 'viewers', value)),
+                      ' Spectateurs',
+                    ]}
                   />
                 }
               />
               <Area
-                dataKey="viewers"
-                type="bumpX"
+                dataKey="smoothed"
+                type="natural"
                 fill="url(#fillStreamerViewers)"
                 stroke="var(--chart-3)"
                 strokeWidth={1.75}

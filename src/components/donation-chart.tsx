@@ -5,11 +5,12 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart'
+import { getTooltipNumber, smoothSeries } from '@/lib/chart-data'
 import { formatDateTime, formatEuros, formatNumber } from '@/lib/format'
 import type { DonationSnapshot } from '@/types/zevent'
 
 const chartConfig = {
-  total: {
+  smoothed: {
     label: 'Total des dons',
     color: 'var(--chart-1)',
   },
@@ -24,6 +25,7 @@ export function DonationChart({ history }: DonationChartProps) {
   const firstPoint = history[0]
   const lastPoint = history.at(-1)
   const delta = firstPoint && lastPoint ? Math.max(0, lastPoint.total - firstPoint.total) : 0
+  const chartData = smoothSeries(history, (point) => point.total)
 
   return (
     <section>
@@ -36,7 +38,7 @@ export function DonationChart({ history }: DonationChartProps) {
       <div className="mt-6">
         {hasEnoughData ? (
           <ChartContainer config={chartConfig} className="h-[280px] w-full">
-            <AreaChart data={history} margin={{ left: 8, right: 12, top: 8 }}>
+            <AreaChart data={chartData} margin={{ left: 8, right: 12, top: 8 }}>
               <defs>
                 <linearGradient id="fillTotal" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="var(--chart-1)" stopOpacity={0.32} />
@@ -65,16 +67,16 @@ export function DonationChart({ history }: DonationChartProps) {
                       const time = payload?.[0]?.payload?.time
                       return typeof time === 'number' ? formatDateTime(time) : ''
                     }}
-                    formatter={(value) => [
-                      formatEuros(Number(value)),
+                    formatter={(value, _name, _item, _index, payload) => [
+                      formatEuros(getTooltipNumber(payload, 'total', value)),
                       ' Total',
                     ]}
                   />
                 }
               />
               <Area
-                dataKey="total"
-                type="bumpX"
+                dataKey="smoothed"
+                type="natural"
                 fill="url(#fillTotal)"
                 stroke="var(--chart-1)"
                 strokeWidth={1.75}
