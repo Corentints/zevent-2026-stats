@@ -31,7 +31,10 @@ export function StreamerDonationChart({ history, isConfigured }: StreamerDonatio
       </header>
       <div className="mt-6 min-[1440px]:mt-4">
         {hasEnoughData ? (
-          <ChartContainer config={chartConfig} className="h-[280px] w-full min-[1440px]:h-[200px]">
+          <ChartContainer
+            config={chartConfig}
+            className="h-[280px] w-full min-[1440px]:h-[clamp(140px,calc((100vh-24rem)/2),200px)]"
+          >
             <AreaChart data={history} margin={{ left: 8, right: 12, top: 8 }}>
               <defs>
                 <linearGradient id="fillStreamerAmount" x1="0" y1="0" x2="0" y2="1">
@@ -76,7 +79,7 @@ export function StreamerDonationChart({ history, isConfigured }: StreamerDonatio
             </AreaChart>
           </ChartContainer>
         ) : (
-          <div className="flex h-[280px] items-center justify-center text-sm text-muted-foreground min-[1440px]:h-[200px]">
+          <div className="flex h-[280px] items-center justify-center text-sm text-muted-foreground min-[1440px]:h-[clamp(140px,calc((100vh-24rem)/2),200px)]">
             {isConfigured ? 'En attente de données historiques…' : 'Historique indisponible.'}
           </div>
         )}

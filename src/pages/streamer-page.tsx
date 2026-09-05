@@ -162,7 +162,7 @@ export function StreamerPage() {
             <CardContent
               key={twitchId}
               ref={goalsScrollRef}
-              className="scrollbar-modern max-h-[calc(100vh-13rem)] overflow-y-auto px-0"
+              className="scrollbar-modern max-h-[70vh] overflow-y-auto px-0 xl:max-h-[calc(100vh-19.5rem)]"
             >
               {sortedGoals.map((goal) => {
                 const reached = currentAmount >= goal.amountRequired
