@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { ChevronDown, Search, X } from 'lucide-react'
 import { MarqueeText } from '@/components/marquee-text'
@@ -44,7 +44,32 @@ function SidebarRowSkeleton({ withGoal }: { withGoal: boolean }) {
 export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) {
   const [search, setSearch] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
+  const searchRef = useRef<HTMLInputElement>(null)
   const goals = useDonationGoals()
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      const target = event.target as HTMLElement | null
+      const isTyping =
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target?.isContentEditable
+
+      if (event.key === '/' && !isTyping) {
+        event.preventDefault()
+        setMobileOpen(true)
+        searchRef.current?.focus()
+      }
+
+      if (event.key === 'Escape' && document.activeElement === searchRef.current) {
+        setSearch('')
+        searchRef.current?.blur()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   const sorted = useMemo(
     () => [...streamers].sort((a, b) => b.donationAmount.number - a.donationAmount.number),
@@ -95,6 +120,7 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
           <div className="relative">
             <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
+              ref={searchRef}
               placeholder="Rechercher…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -110,6 +136,11 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
               >
                 <X className="size-3.5" />
               </button>
+            )}
+            {!search && (
+              <kbd className="pointer-events-none absolute right-2.5 top-1/2 hidden -translate-y-1/2 rounded-sm bg-white/[0.06] px-1.5 py-0.5 font-sans text-[10px] text-muted-foreground lg:block">
+                /
+              </kbd>
             )}
           </div>
         </div>

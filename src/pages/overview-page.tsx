@@ -5,9 +5,11 @@ import { PageContainer, PageHeader } from '@/components/page-layout'
 import { StatsHeader } from '@/components/stats-header'
 import { ZeventDataGate } from '@/components/zevent-data-gate'
 import { useDonationHistory } from '@/hooks/use-donation-history'
+import { useDocumentTitle } from '@/hooks/use-document-title'
 import { useZeventData } from '@/hooks/use-zevent-data'
 
 export function OverviewPage() {
+  useDocumentTitle('ZEvent — suivi en direct')
   const { data, dataUpdatedAt } = useZeventData()
   const history = useDonationHistory(data)
 

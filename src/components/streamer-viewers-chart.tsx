@@ -22,12 +22,18 @@ interface StreamerViewersChartProps {
 
 export function StreamerViewersChart({ history, isConfigured }: StreamerViewersChartProps) {
   const hasEnoughData = history.length >= 2
+  const peakViewers = history.reduce((peak, point) => Math.max(peak, point.viewers), 0)
 
   return (
     <section>
       <header className="flex items-baseline justify-between gap-4">
         <h2 className="text-base font-semibold">Audience</h2>
-        {hasEnoughData && <p className="text-xs tabular-nums text-muted-foreground">{history.length} relevés</p>}
+        {hasEnoughData && (
+          <p className="text-xs tabular-nums text-muted-foreground">
+            pic {formatNumber(peakViewers)}
+            {' · '}{history.length} relevés
+          </p>
+        )}
       </header>
       <div className="mt-6 min-[1440px]:mt-4">
         {hasEnoughData ? (

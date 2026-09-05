@@ -21,12 +21,20 @@ interface DonationChartProps {
 
 export function DonationChart({ history }: DonationChartProps) {
   const hasEnoughData = history.length >= 2
+  const firstPoint = history[0]
+  const lastPoint = history.at(-1)
+  const delta = firstPoint && lastPoint ? Math.max(0, lastPoint.total - firstPoint.total) : 0
 
   return (
     <section>
       <header className="flex items-baseline justify-between gap-4">
         <h2 className="text-base font-semibold">Évolution des dons</h2>
-        {hasEnoughData && <p className="text-xs tabular-nums text-muted-foreground">{history.length} relevés</p>}
+        {hasEnoughData && (
+          <p className="text-xs tabular-nums text-muted-foreground">
+            <span className="font-medium text-primary">+{formatEuros(delta)}</span>
+            {' · '}{history.length} relevés
+          </p>
+        )}
       </header>
       <div className="mt-6">
         {hasEnoughData ? (

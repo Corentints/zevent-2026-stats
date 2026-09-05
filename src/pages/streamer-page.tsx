@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useDonationGoals } from '@/hooks/use-donation-goals'
+import { useDocumentTitle } from '@/hooks/use-document-title'
 import { useStreamerHistory } from '@/hooks/use-streamer-history'
 import { useZeventData } from '@/hooks/use-zevent-data'
 import { HISTORY_API_URL } from '@/lib/history-api'
@@ -23,6 +24,7 @@ export function StreamerPage() {
   const activeGoalRef = useRef<HTMLDivElement>(null)
 
   const streamer = data?.live.find((item) => item.twitch_id === twitchId)
+  useDocumentTitle(streamer ? `${streamer.display} — ZEvent` : 'Streamer — ZEvent')
 
   const sortedGoals = useMemo(() => {
     const list = goals.data?.[twitchId] ?? []
