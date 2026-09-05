@@ -31,7 +31,6 @@ export function StreamerViewersChart({ history, isConfigured }: StreamerViewersC
         {hasEnoughData && (
           <p className="text-xs tabular-nums text-muted-foreground">
             pic {formatNumber(peakViewers)}
-            {' · '}{history.length} relevés
           </p>
         )}
       </header>
@@ -76,10 +75,12 @@ export function StreamerViewersChart({ history, isConfigured }: StreamerViewersC
               />
               <Area
                 dataKey="viewers"
-                type="monotone"
+                type="bumpX"
                 fill="url(#fillStreamerViewers)"
                 stroke="var(--chart-3)"
                 strokeWidth={1.75}
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 isAnimationActive={false}
               />
             </AreaChart>

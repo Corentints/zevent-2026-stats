@@ -30,10 +30,7 @@ export function DonationChart({ history }: DonationChartProps) {
       <header className="flex items-baseline justify-between gap-4">
         <h2 className="text-base font-semibold">Évolution des dons</h2>
         {hasEnoughData && (
-          <p className="text-xs tabular-nums text-muted-foreground">
-            <span className="font-medium text-primary">+{formatEuros(delta)}</span>
-            {' · '}{history.length} relevés
-          </p>
+          <p className="text-xs font-medium tabular-nums text-primary">+{formatEuros(delta)}</p>
         )}
       </header>
       <div className="mt-6">
@@ -77,10 +74,12 @@ export function DonationChart({ history }: DonationChartProps) {
               />
               <Area
                 dataKey="total"
-                type="monotone"
+                type="bumpX"
                 fill="url(#fillTotal)"
                 stroke="var(--chart-1)"
                 strokeWidth={1.75}
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 isAnimationActive={false}
               />
             </AreaChart>

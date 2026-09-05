@@ -31,10 +31,7 @@ export function StreamerDonationChart({ history, isConfigured }: StreamerDonatio
       <header className="flex items-baseline justify-between gap-4">
         <h2 className="text-base font-semibold">Dons reçus</h2>
         {hasEnoughData && (
-          <p className="text-xs tabular-nums text-muted-foreground">
-            <span className="font-medium text-primary">+{formatEuros(delta)}</span>
-            {' · '}{history.length} relevés
-          </p>
+          <p className="text-xs font-medium tabular-nums text-primary">+{formatEuros(delta)}</p>
         )}
       </header>
       <div className="mt-6 min-[1440px]:mt-4">
@@ -78,10 +75,12 @@ export function StreamerDonationChart({ history, isConfigured }: StreamerDonatio
               />
               <Area
                 dataKey="amount"
-                type="monotone"
+                type="bumpX"
                 fill="url(#fillStreamerAmount)"
                 stroke="var(--chart-1)"
                 strokeWidth={1.75}
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 isAnimationActive={false}
               />
             </AreaChart>

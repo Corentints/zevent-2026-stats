@@ -58,9 +58,11 @@ export function StreamerHoverCard({
                 </defs>
                 <Area
                   dataKey="amount"
-                  type="monotone"
+                  type="bumpX"
                   stroke="var(--chart-1)"
                   strokeWidth={1.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   fill={`url(#${gradientId})`}
                   isAnimationActive={false}
                 />
