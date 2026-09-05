@@ -114,7 +114,7 @@ export function StreamerSidebar({ streamers, isPending }: StreamerSidebarProps) 
           </div>
         </div>
 
-        <nav className="scrollbar-hidden flex-1 overflow-y-auto px-2 pb-3">
+        <nav className="scrollbar-modern flex-1 overflow-y-auto px-2 pb-3">
           {isPending ? (
             <div className="space-y-0.5">
               {Array.from({ length: 10 }).map((_, i) => (
