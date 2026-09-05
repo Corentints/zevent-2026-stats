@@ -4,11 +4,11 @@ import { StreamerSidebar } from '@/components/streamer-sidebar'
 import { useZeventData } from '@/hooks/use-zevent-data'
 
 export function RootLayout() {
-  const { data, isPending, isFetching, refetch } = useZeventData()
+  const { data, isPending } = useZeventData()
 
   return (
     <div className="min-h-screen">
-      <Navbar data={data} isFetching={isFetching} onRefresh={() => refetch()} />
+      <Navbar />
 
       <div className="flex flex-col lg:flex-row">
         <StreamerSidebar streamers={data?.live ?? []} isPending={isPending} />
