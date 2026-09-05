@@ -4,24 +4,26 @@ Petit Cloudflare Worker qui construit un **historique partagé** des dons ZEvent
 
 ## Comment ça marche
 
-- Un **Cron Trigger** (`*/6 * * * *`, toutes les 6 min) appelle `https://zevent.fr/api/` et insère :
-  - une ligne dans `global_history` (total des dons + spectateurs cumulés)
-  - une ligne par streamer (338 actuellement) dans `streamer_history` (montant de dons + spectateurs)
-- Stockage sur **D1** (SQLite managé par Cloudflare), pas R2 : on a des lignes qui s'accumulent en continu (~339 lignes/tick), ce n'est pas un usage adapté à un blob JSON qu'on relit/réécrit en entier à chaque fois (R2 aurait vite cogné les limites CPU du plan gratuit).
+- Un **Cron Trigger** (`* * * * *`, toutes les minutes) appelle `https://zevent.fr/api/`.
+- Chaque relevé complet est compacté dans une seule ligne de `streamer_history` :
+  - `amount` et `viewers` contiennent les totaux globaux ;
+  - `display` contient un objet JSON compact indexé par identifiant Twitch, avec les dons et spectateurs de chaque streamer ;
+  - `twitch_id` vaut `__zevent_snapshot__` pour distinguer ces nouveaux relevés des anciennes lignes individuelles.
+- Les endpoints fusionnent les anciennes données et les snapshots compacts, sans migration destructive ni perte d'historique.
+- Les réponses sont conservées 55 secondes dans le cache Cloudflare pour limiter les lectures D1 lorsque plusieurs visiteurs consultent la même courbe.
 - `GET /history` → historique global, `GET /history/streamer/:twitchId` → historique d'un streamer donné.
 
-### Pourquoi toutes les 6 minutes ?
+### Pourquoi un snapshot compact ?
 
-Le plan gratuit D1 limite à **100 000 lignes écrites/jour**. Avec 338 streamers + 1 ligne globale = 339 lignes par tick :
+Le plan gratuit D1 limite à **100 000 lignes écrites/jour** et chaque index modifié compte comme une écriture supplémentaire. L'ancien format écrivait une ligne par streamer dans une table possédant deux index, soit environ 1 015 écritures facturées par relevé.
 
-| Cadence | Ticks/jour | Lignes/jour | % du quota gratuit |
-|---|---|---|---|
-| 2 min | 720 | 244 080 | ❌ 244% (dépasse) |
-| 5 min | 288 | 97 632 | ⚠️ 98% (trop juste) |
-| **6 min** | **240** | **81 360** | ✅ 81% |
-| 10 min | 144 | 48 816 | ✅ 49% |
+Le nouveau format écrit une seule ligne dans cette même table. Table + clé primaire + index secondaire représentent au maximum trois écritures facturées par relevé :
 
-6 min garde une marge confortable (~19%) pour absorber retries et pics d'activité, tout en donnant une résolution correcte pour une courbe sur un event de 50h (~500 points par streamer).
+| Cadence | Relevés/jour | Écritures D1/jour | Quota gratuit |
+|---|---:|---:|---:|
+| **1 min** | **1 440** | **~4 320** | **~4,3 %** |
+
+La fréquence d'une minute est la fréquence maximale des Cron Triggers Cloudflare et garde plus de 95 % de marge sur le quota d'écriture.
 
 ## Déployer
 
@@ -68,7 +70,7 @@ VITE_HISTORY_API_URL=https://zevent-history-worker.<ton-compte>.workers.dev
 
 Si la variable n'est pas définie, l'app retombe automatiquement sur l'ancien comportement (historique local par navigateur, total global uniquement) — rien ne casse.
 
-Le frontend actuel ne consomme que `/history` (courbe globale). L'endpoint `/history/streamer/:twitchId` existe et renvoie déjà de la vraie donnée, mais rien ne l'affiche encore côté UI (sparkline par ligne, graphique au clic sur un streamer...) — à faire si besoin.
+Le frontend consomme `/history` pour la courbe globale et `/history/streamer/:twitchId` pour les pages et aperçus des streamers.
 
 ## Dev local
 
@@ -85,4 +87,4 @@ curl http://localhost:8787/__scheduled                    # déclenche manuellem
 
 - Pas d'atomicité inter-requêtes sur l'insertion par lots de 20 streamers (voir commentaire dans `src/index.ts`) : un lot qui échoue n'empêche pas les autres d'être écrits. Acceptable pour des stats, pas pour une donnée critique.
 - Le cron continue de tourner après la fin de l'event tant que le worker est déployé — pense à supprimer le Cron Trigger (ou le worker) une fois ZEvent terminé.
-- Plan gratuit D1 : 5 Go de stockage total, 5M lignes lues/jour, 100k lignes écrites/jour (dépassé au-delà, jusqu'à minuit UTC). Largement suffisant pour un event de quelques jours avec la cadence actuelle.
+- Plan gratuit D1 : 5 Go de stockage total, 5M lignes lues/jour et 100k lignes écrites/jour. Le cache limite les lectures répétées, tandis que les snapshots compacts restent très largement sous la limite d'écriture.
