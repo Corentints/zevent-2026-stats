@@ -137,7 +137,7 @@ export function StreamerPage() {
       />
 
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
-        <div className="min-w-0 space-y-6">
+        <div className="grid min-w-0 gap-6 min-[1440px]:grid-cols-2">
           <StreamerDonationChart
             history={history.data ?? []}
             isConfigured={Boolean(HISTORY_API_URL)}
@@ -162,7 +162,7 @@ export function StreamerPage() {
             <CardContent
               key={twitchId}
               ref={goalsScrollRef}
-              className="scrollbar-modern max-h-[70vh] overflow-y-auto px-0"
+              className="scrollbar-modern max-h-[calc(100vh-13rem)] overflow-y-auto px-0"
             >
               {sortedGoals.map((goal) => {
                 const reached = currentAmount >= goal.amountRequired
