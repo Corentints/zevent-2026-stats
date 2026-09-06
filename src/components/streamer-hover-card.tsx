@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import { Area, AreaChart, ResponsiveContainer } from 'recharts'
+import { Area, AreaChart, ResponsiveContainer, XAxis } from 'recharts'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { useStreamerHistory } from '@/hooks/use-streamer-history'
@@ -58,6 +58,13 @@ export function StreamerHoverCard({
                     <stop offset="95%" stopColor="var(--chart-1)" stopOpacity={0.02} />
                   </linearGradient>
                 </defs>
+                <XAxis
+                  dataKey="time"
+                  type="number"
+                  scale="linear"
+                  domain={['dataMin', 'dataMax']}
+                  hide
+                />
                 <Area
                   dataKey="smoothed"
                   type="natural"

@@ -48,6 +48,9 @@ export function DonationChart({ history }: DonationChartProps) {
               <CartesianGrid vertical={false} strokeDasharray="2 6" />
               <XAxis
                 dataKey="time"
+                type="number"
+                scale="linear"
+                domain={['dataMin', 'dataMax']}
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
